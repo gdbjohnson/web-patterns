@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sliding Menu</title>
+	<style type="text/css">
+	
+	/*************************************
+	Credit: http://callmenick.com/post/slide-and-push-menus-with-css3-transitions
+	*************************************/
+
+	.menu {
+	    position: fixed;
+	    z-index: 200;
+	    background-color: #67b5d1;
+	    transition: transform 0.3s;
+	}
+
+	.menu-items {
+	    list-style: none;
+	     margin: 0;
+	     padding: 0;
+	}
+
+	body.menu-is-active {
+	  overflow: hidden;
+	}
+
+	.menu-mask {
+	  position: fixed;
+	  z-index: 100;
+	  top: 0;
+	  left: 0;
+	  overflow: hidden;
+	  width: 0;
+	  height: 0;
+	  background-color: #000;
+	  opacity: 0;
+	  transition: opacity 0.3s, width 0s 0.3s, height 0s 0.3s;
+	}
+
+	.menu-mask.is-active {
+	  width: 100%;
+	  height: 100%;
+	  opacity: 0.7;
+	  transition: opacity 0.3s;
+	}
+
+	.menu-slide-left, .menu-push-left {
+	    width: 100%;
+	     height: 100%;
+	     overflow-y: scroll;
+	}
+
+	@media all and (min-width: 320px) {
+	  .menu-slide-left,
+	  .menu-slide-right,
+	  .menu-push-left,
+	  .menu-push-right {
+	    width: 300px;
+	  }
+	}
+
+	.menu-slide-left .menu-item,
+	.menu-push-left .menu-item {
+	  display: block;
+	  text-align: center;
+	  border-top: solid 1px #b5dbe9;
+	  border-bottom: solid 1px #3184a1;
+	}
+
+	.menu-slide-left .menu-item:first-child,
+	.menu-push-left .menu-item:first-child {
+		border-top: none;
+	}
+
+	.menu-slide-left .menu-item:last-child,
+	.menu-push-left .menu-item:last-child {
+	  border-bottom: none;
+	}
+
+	.menu-slide-left a,
+	.menu-push-left a {
+	  display: block;
+	  padding: 12px 24px;
+	  color: #fff;
+	}
+
+	.menu-slide-left,
+	.menu-push-left {
+	  top: 0;
+	  left: 0;
+	  transform: translateX(-100%);
+	}
+
+	@media all and (min-width: 320px) {
+	  .menu-slide-left,
+	  .menu-push-left {
+	    transform: translateX(-300px);
+	  }
+	}
+
+	.menu-slide-left.is-active,
+	.menu-push-left.is-active {
+	  transform: translateX(0);
+	}
+
+	.content-wrapper.has-push-left {
+	  transform: translateX(100%);
+	}
+
+	@media all and (min-width: 320px) {
+	  .content-wrapper.has-push-left {
+	    transform: translateX(300px);
+	  }
+	}
+
+	
+	</style>
+	<script type="text/javascript">
+	
+	/* Define Menu object */
+	(function(window) {
+
+	  'use strict';
+
+	  /**
+	   * Extend Object helper function.
+	   */
+	  function extend(a, b) {
+	    for(var key in b) { 
+	      if(b.hasOwnProperty(key)) {
+	        a[key] = b[key];
+	      }
+	    }
+	    return a;
+	  }
+
+	  /**
+	   * Each helper function.
+	   */
+	  function each(collection, callback) {
+	    for (var i = 0; i < collection.length; i++) {
+	      var item = collection[i];
+	      callback(item);
+	    }
+	  }
+
+	  /**
+	   * Menu Constructor.
+	   */
+	  function Menu(options) {
+	    this.options = extend({}, this.options);
+	    extend(this.options, options);
+	    this._init();
+	
+	  }
+
+	  /**
+	   * Menu Options.
+	   */
+	  Menu.prototype.options = {
+	    wrapper: '#content-wrapper',          // The content wrapper
+	    type: 'slide-left',             // The menu type
+	    menuOpenerClass: '.menu-open',   // The menu opener class names (i.e. the buttons)
+	    maskId: '#menu-mask'               // The ID of the mask
+	  };
+
+	  /**
+	   * Initialise Menu.
+	   */
+	  Menu.prototype._init = function() {
+	    this.body = document.body;
+	    this.wrapper = document.querySelector(this.options.wrapper);
+	    this.mask = document.querySelector(this.options.maskId);
+	    this.menu = document.querySelector('#menu');
+	    this.closeBtn = this.menu.querySelector('.menu-close');
+	    this.menuOpeners = document.querySelectorAll(this.options.menuOpenerClass);
+	    this._initEvents();
+	  };
+
+	  /**
+	   * Initialise Menu Events.
+	   */
+	  Menu.prototype._initEvents = function() {
+	    // Event for clicks on the close button inside the menu.
+	    this.closeBtn.addEventListener('click', function(e) {
+	      e.preventDefault();
+	      this.close();
+	    }.bind(this));
+
+	    // Event for clicks on the mask.
+	    this.mask.addEventListener('click', function(e) {
+	      e.preventDefault();
+	      this.close();
+	    }.bind(this));
+	  };
+
+	  /**
+	   * Open Menu.
+	   */
+	  Menu.prototype.open = function() {
+	    this.body.classList.add('has-active-menu');
+	    this.wrapper.classList.add('has-' + this.options.type);
+	    this.menu.classList.add('is-active');
+	    this.mask.classList.add('is-active');
+	    this.disableMenuOpeners();
+	  };
+
+	  /**
+	   * Close Menu.
+	   */
+	  Menu.prototype.close = function() {
+	    this.body.classList.remove('menu-is-active');
+	    this.wrapper.classList.remove('has-' + this.options.type);
+	    this.menu.classList.remove('is-active');
+	    this.mask.classList.remove('is-active');
+	    this.enableMenuOpeners();
+	  };
+
+	  /**
+	   * Disable Menu Openers.
+	   */
+	  Menu.prototype.disableMenuOpeners = function() {
+	    each(this.menuOpeners, function(item) {
+	      item.disabled = true;
+	    });
+	  };
+
+	  /**
+	   * Enable Menu Openers.
+	   */
+	  Menu.prototype.enableMenuOpeners = function() {
+	    each(this.menuOpeners, function(item) {
+	      item.disabled = false;
+	    });
+	  };
+
+	  /**
+	   * Add to global namespace.
+	   */
+	  window.Menu = Menu;
+
+	})(window);  /* Menu Object */
+	
+	
+	window.onload = function () { 
+		var myMenu = new Menu({
+		  wrapper: '#content-wrapper',
+		  type: 'push-left',
+		  menuOpenerClass: '.menu-open',
+		  maskId: '#menu-mask'
+		});
+
+		var openMenuBtn = document.querySelector('#menu-open');
+
+		openMenuBtn.addEventListener('click', function(e) {
+		  e.preventDefault;
+		  myMenu.open();
+		});
+	}
+	
+	
+	</script>
+</head>
+<body>
+	<nav id="menu" class="menu menu-slide-left">
+		<button class="menu-close">&larr; Close Menu</button>
+		<ul class="menu-items">
+			<li>Menu Item 1</li>
+			<li>Menu Item 2</li>
+			<li>Menu Item 3</li>
+		</ul>
+	</nav>
+	<div id="menu-mask" class="menu-mask"></div>
+	<main class="content-wrapper" id="content-wrapper">
+		<div id="menu-open">Click to open the menu</div>
+	</main>
+</body>
+</html>

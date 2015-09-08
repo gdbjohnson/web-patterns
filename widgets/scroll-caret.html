@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Scroll Caret</title>
+	<style type="text/css">
+		
+		@import url(http://weloveiconfonts.com/api/?family=entypo);
+
+		/* entypo */
+		[class*="entypo-"]:before {
+		  font-family: 'entypo', sans-serif;
+		}
+
+		body {
+			background-color: grey;
+			color: white;
+			font-family: "Myriad Set Pro","Lucida Grande","Helvetica Neue","Helvetica","Arial","Verdana","sans-serif";
+			font-style: normal;
+			font-weight: 400;
+			font-size: 18px;
+		}
+
+		.scroll-caret {
+			position: fixed;
+			left: calc(50% - 35px);
+			top: calc(100% - 100px);
+
+			width: 70px;
+			height: 70px;
+			border-radius: 50%;
+			background-color: rgba(0, 0, 0, 0.4);
+
+			text-align: center;
+		}
+
+		.caret-animation {
+			color: white;
+		    padding-bottom: 0;
+		    position: relative;
+		    width: 300px;
+		    left: 50%;
+		}
+
+		.shimmer {
+		  text-align: center;
+		  color: rgba(255,255,255,0.1);
+		  background: -webkit-gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff));
+		  background: -moz-gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff));
+		  background: gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff));
+		  -webkit-background-size: 125px 100%;
+		  -moz-background-size: 125px 100%;
+		  background-size: 125px 100%;
+		  -webkit-background-clip: text;
+		  -moz-background-clip: text;
+		  background-clip: text;
+		  -webkit-animation-name: shimmer;
+		  -moz-animation-name: shimmer;
+		  animation-name: shimmer;
+		  -webkit-animation-duration: 2s;
+		  -moz-animation-duration: 2s;
+		  animation-duration: 2s;
+		  -webkit-animation-iteration-count: infinite;
+		  -moz-animation-iteration-count: infinite;
+		  animation-iteration-count: infinite;
+		  background-repeat: no-repeat;
+		  background-position: 0 0;
+		  background-color: #222;
+		}
+@-moz-keyframes shimmer {
+  0% {
+    background-position: top left;
+  }
+  100% {
+    background-position: top right;
+  }
+}
+@-webkit-keyframes shimmer {
+  0% {
+    background-position: top left;
+  }
+  100% {
+    background-position: top right;
+  }
+}
+@-o-keyframes shimmer {
+  0% {
+    background-position: top left;
+  }
+  100% {
+    background-position: top right;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: top left;
+  }
+  100% {
+    background-position: top right;
+  }
+}
+
+		
+
+	</style>
+</head>
+<body>
+	<div class="yo">
+	<div class="scroll-caret">
+		<p class="caret-animation shimmer">Scroll
+			<br/>
+			<div class="entypo-down-open-big shimmer"></div>
+		</p>
+	</div>
+	</div>
+</body>
+</html>
